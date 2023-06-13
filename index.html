@@ -3,7 +3,6 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="author" content="Travis Ahlberg">
   <title>Color Life</title>
   <style>
     body, html {
@@ -220,8 +219,6 @@
               var gCount: u32 = 0;
               var bCount: u32 = 0;
 
-              let colorAmp: u32 = 16;
-
               var me = calculateActiveNeighbors(u32(input.cell.x), u32(input.cell.y));
               for (var y: u32 = 0; y < 64; y = y + 1) {
                 for (var x: u32 = 0; x < 64; x = x + 1) {
@@ -229,7 +226,9 @@
                   if (cellValue == 1u) {
                     var them = calculateActiveNeighbors(u32(x),u32(y));
                     if (me==them) {
-                      break;
+                      rCount--;
+                      bCount--;
+                      gCount--;
                     }
                     if (me<them) {
                       var color: u32 = u32((input.cell.x + input.cell.y) % 3);
@@ -240,19 +239,21 @@
                       }
                     }
                     if (me>them) {
-                      rCount = rCount + colorAmp;
-                      bCount = bCount + colorAmp;
-                      gCount = gCount + colorAmp;
+                      rCount++;
+                      bCount++;
+                      gCount++;
                     }
                   }
                 }
               }
 
-              var r: f32 = f32(rCount) / f32(colorAmp);
-              var g: f32 = f32(gCount) / f32(colorAmp);
-              var b: f32 = f32(bCount) / f32(colorAmp);
+              var r: f32 = f32(rCount) / 64.0;
+              var g: f32 = f32(gCount) / 64.0;
+              var b: f32 = f32(bCount) / 64.0;
 
-              return vec4<f32>(r, g, b, 1.0);
+              var color: vec3<f32> = vec3<f32>(r,g,b);
+
+              return vec4<f32>(color, 1.0);
           }
         `
       });
